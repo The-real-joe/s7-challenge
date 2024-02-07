@@ -76,6 +76,17 @@ export default function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault()
+    setErrors()
+    setSuccess()
+    validationForm(values)
+      .then((result) => {
+        if (result[1]) {
+          setSuccess('Thank you for your order!')
+        } else {
+          setErrors(result[0])
+        }
+      })
+      .catch((err) => console.error(err))
   }
   const updateFormMode= (event) =>{
     setValues({
