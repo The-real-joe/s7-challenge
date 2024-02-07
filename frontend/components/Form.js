@@ -9,6 +9,7 @@ const validationErrors = {
   sizeIncorrect: 'size must be S or M or L'
 }
 
+
 // 👇 Here you will create your schema.
 
 const validationSchema = yup.object().shape({
@@ -52,6 +53,8 @@ const toppings = [
   { topping_id: '4', text: 'Mushrooms' },
   { topping_id: '5', text: 'Ham' },
 ]
+
+
 
 export default function Form() {
   return (
@@ -126,7 +129,7 @@ export default function Form() {
         </label>
       </div>
       {/* 👇 Make sure the submit stays disabled until the form validates! */}
-      <input type="submit" disabled  />
+      <input type="submit" disabled={!submitDisabled} />
     </form>
   )
 }
