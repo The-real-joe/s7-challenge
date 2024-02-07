@@ -22,6 +22,9 @@ const validationSchema = yup.object().shape({
     .required('Size is required'),
 });
 
+
+
+
 // 👇 This function will be used to validate your form.
 const validationForm = async (data) => {
   try {
@@ -57,18 +60,49 @@ const toppings = [
 
 
 export default function Form() {
+  const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [values, setValues] = useState({
+    fullName: '',
+    size: '',
+    pepperoni: false,
+    peppers: false,
+    pineapple: false,
+    mushrooms: false,
+    ham: false,
+  })
+  const [errors, setErrors] = useState()
+  const [success, setSuccess] = useState()
+
+
+  const onSubmit = (event) => {
+    event.preventDefault()
+  }
+  const updateFormMode= (event) =>{
+    setValues({
+      ...values,
+      [event.target.id]: event.target.value
+    })
+    if ((event.target.id== "fullName" && event.target.value.length >= 3) && (event.target.id== "size" && event.target.value !== "")) {
+      setSubmitDisabled(true)
+    }else if (event.target.id== "fullName" && event.target.value.length < 3){
+      setSubmitDisabled(false)
+    }
+
+  
+}
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <h2>Order Your Pizza</h2>
-      {true && <div className='success'>Thank you for your order!</div>}
-      {true && <div className='failure'>Something went wrong</div>}
+      {success && <div className='success'>{success}</div>}
+      {errors && <div className='failure'>{errors}</div>}
 
       <div className="input-group">
         <div>
           <label htmlFor="fullName">Full Name</label><br />
-          <input placeholder="Type full name" id="fullName" type="text" />
+          <input onChange={(event) =>updateFormMode(event)} placeholder="Type full name" id="fullName" type="text" />
         </div>
-        {true && <div className='error'>Bad value</div>}
+        {errors && <div className='error'>Bad value</div>}
       </div>
 
       <div className="input-group">
@@ -82,7 +116,7 @@ export default function Form() {
             <option value="L">Large</option>
           </select>
         </div>
-        {true && <div className='error'>Bad value</div>}
+        {errors && <div className='error'>Bad value</div>}
       </div>
 
       <div className="input-group">
@@ -129,7 +163,9 @@ export default function Form() {
         </label>
       </div>
       {/* 👇 Make sure the submit stays disabled until the form validates! */}
-      <input type="submit" disabled={!submitDisabled} />
+      <input type="submit"  disabled={!submitDisabled} />
     </form>
+
+    
   )
 }
